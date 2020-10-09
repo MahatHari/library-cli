@@ -1,4 +1,4 @@
-import fs, { copyFile } from 'fs';
+import fs from 'fs';
 import {IBook} from '../typing'
 
 class Library {
@@ -108,4 +108,4 @@ class Library {
 
 }
 
-export default new Library()
+export default new Library();
