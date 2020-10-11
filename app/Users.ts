@@ -3,7 +3,7 @@ import { IUser, IBook } from '../typing';
 
 class Users{
     public data: IUser[] = [];
-    public signedUser: IUser | null = null;
+    public signedUser: IUser |null = null;
 
     /**
      * Constructor method
@@ -52,7 +52,7 @@ class Users{
      * add () -> create a new user and add it to JSON database
      * @param name:string, 
      * @param password:string     */
-    public add(name:string, password:string):IUser {
+    public addUser(name:string, password:string):IUser {
         const newUser: IUser = {
             name: name,
             password: password,
@@ -100,7 +100,10 @@ class Users{
             this.data.splice(this.data.findIndex(
                 (user) => user.id === userId),
             1, this.signedUser);
+            this.saveToJSON();
+            return true;
         }
+        return false;
     }
 
     /**

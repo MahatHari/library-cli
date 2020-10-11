@@ -1,5 +1,5 @@
 import fs from 'fs';
-import {IBook} from '../typing'
+import { IBook } from '../typing';
 
 class Library {
     /**
@@ -40,7 +40,7 @@ class Library {
      * @param author
      */
     public getBooksByAuthor(author:string):IBook[] {
-        return this.books.filter((book: IBook) => book.author === author));
+        return this.books.filter((book: IBook) => book.author === author);
     }
 
     /**
@@ -56,22 +56,22 @@ class Library {
      * @param book
      * @param userId
      */
-    public borrow(book:IBook, userId:string):string {
+    public borrowBook(book:IBook, userId:string):string {
         const bookIndex = this.books.findIndex((elem) => elem === book);
         const copyIndex = book.copies.findIndex((copy) => copy.browerId === null && copy.status === 'inLibrary');
 
-        const dueDate = new Date()
+        const dueDate = new Date();
         dueDate.setMonth(dueDate.getMonth() + 1);
 
         const copyId = book.copies[copyIndex].id;
 
         this.books[bookIndex].copies.splice(copyIndex, 1, {
             id: copyId,
-            status="borrowed",
-            browerId=userId,
-            dueDate=dueDate.toISOString()
+            status:"borrowed",
+            browerId:userId,
+            dueDate:dueDate.toISOString()
         });
-        this.saveToJson()
+        this.saveToJson();
         return copyId;
     }
 
@@ -80,19 +80,19 @@ class Library {
      * @param userId
      * @param book
      */
-    public return(userId:string, book:IBook):string {
-        const bookIndex = this.books.findIndex((elem) => elem === book)
-        const copyIndex = book.copies.findIndex((copy) => copy.browerId === userId)
+    public returnBook(userId:string, book:IBook):string {
+        const bookIndex = this.books.findIndex((elem) => elem === book);
+        const copyIndex = book.copies.findIndex((copy) => copy.browerId === userId);
         
-        const copyId = book.copies[copyIndex].id
+        const copyId = book.copies[copyIndex].id;
         
         this.books[bookIndex].copies.splice(copyIndex, 1, {
             id: copyId,
             status: "inLibrary",
             dueDate: null,
-            browerId:null
-        })
-        this.saveToJson()
+            browerId: null
+        });
+        this.saveToJson();
         
         return copyId;
     }
