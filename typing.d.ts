@@ -47,9 +47,9 @@ export interface IMemberCommands{
     quit: function;
     list: function;
     borrow: function;
-    return: function;
-    changeName: function;
-    removeAccount: function;
+    return_book: function;
+    change_name: function;
+    remove_account: function;
     logout: function;
 }
 

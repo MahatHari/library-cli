@@ -3,8 +3,8 @@ import Users from './Users';
 import Library from './Library';
 import Book from './Book';
 
-import { IGuestCommands, IMemberCommands, GuestCommandsKeys, MemeberCommandsKeys, IBook, IBookCopy } from '../typing';
-import { SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG } from 'constants';
+import { IGuestCommands, IMemberCommands, GuestCommandsKeys, MemeberCommandsKeys, IBook} from '../typing';
+
 
 
 const commonCommands = {
@@ -19,15 +19,14 @@ const guestCommands: IGuestCommands = {
     login: () => logIn(),
 };
 
-const memberCommands: IMemeberCommands = {
+const memberCommands: IMemberCommands = {
     ...commonCommands,
-    login: () => logIn(),
     list: () => listBooks(),
     borrow: () => borrowBook(),
-    returnBook: () => returnBook(),
-    changeName: () => changeName(),
-    removeAccount: () => removeAccount(),
-    logOut:()=>logOut(),     
+    return_book: () => returnBook(),
+    change_name: () => changeName(),
+    remove_account: () => removeAccount(),
+    logout:()=>logOut(),     
 };
 
 /**
@@ -306,8 +305,9 @@ export const listBooks = (displayOnly = false): void => {
     const borrwedBook = Library.getBorrowed(signedUserId);
 
     borrwedBook.map((book: IBook, index) => {
+
         console.log(`\n$ Book # ${index + 1}`);
-        new Book(book).printBorrowedBy(signedUserId);
+        new Book(book).printDetails();
     });
 
     if (!borrwedBook.length) {
@@ -425,3 +425,29 @@ export const removeAccount = (intro = true): void => {
 /**
  * 
  */
+export const mainMenu = (intro = ''): void => {
+    if (intro) {
+        console.log(intro);
+    }
+    const command = input.question(`> `).toLowerCase();
+
+    if (Users.signedUser && isMemberKey(command)) {
+        return (memberCommands[command]);
+    }
+    if (!Users.signedUser && isGuestKey(command)) {
+        return guestCommands[command]();
+    }
+    return mainMenu(`Uknown Command! Type 'help' to get list of available commands`);
+
+};
+
+/**
+ * 
+ */
+const isGuestKey = (key: string): key is GuestCommandsKeys => {
+    return ['help', 'search', 'quit', 'signup', 'login'].includes(key);
+};
+
+const isMemberKey = (key: string): key is MemeberCommandsKeys => {
+    return ['help', 'search', 'quit', 'list', 'borrow', 'return', 'change_name', 'remove_account', 'logout'].includes(key);
+};

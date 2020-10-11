@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { IUser, IBook } from '../typing';
 
+
 class Users{
     public data: IUser[] = [];
     public signedUser: IUser |null = null;
